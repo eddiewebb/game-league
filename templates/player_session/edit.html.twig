@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit PlayerSession{% endblock %}
+
+{% block body %}
+    <h1>Edit PlayerSession</h1>
+
+    {{ include('player_session/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_player_session_index') }}">back to list</a>
+
+    {{ include('player_session/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PlayerSession{% endblock %}
+
+{% block body %}
+    <h1>PlayerSession</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Player</th>
+                <td>{{ player_session.player.name }}</td>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>{{ player_session.gameRole.name }}</td>
+            </tr>
+            <tr>
+                <th>Score</th>
+                <td>{{ player_session.score }}</td>
+            </tr>
+            <tr>
+                <th>IsWinner</th>
+                <td>{{ player_session.isWinner ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_player_session_index') }}">back to list</a>
+
+    <a href="{{ path('app_player_session_edit', {'id': player_session.id}) }}">edit</a>
+
+    {{ include('player_session/_delete_form.html.twig') }}
+{% endblock %}

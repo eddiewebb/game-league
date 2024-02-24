@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New PlayerSession{% endblock %}
+
+{% block body %}
+    <h1>Create new PlayerSession</h1>
+
+    {{ include('player_session/_form.html.twig') }}
+
+    <a href="{{ path('app_player_session_index') }}">back to list</a>
+{% endblock %}

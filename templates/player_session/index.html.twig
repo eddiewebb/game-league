@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PlayerSession index{% endblock %}
+
+{% block body %}
+    <h1>PlayerSession index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Player</th>
+                <th>Role</th>
+                <th>Score</th>
+                <th>IsWinner</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for player_session in player_sessions %}
+            <tr>
+                <td>{{ player_session.id }}</td>
+                <td>{{ player_session.player.name }}</td>
+                <td>{{ player_session.gameRole.name }}</td>
+                <td>{{ player_session.score }}</td>
+                <td>{{ player_session.isWinner ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_player_session_show', {'id': player_session.id}) }}">show</a>
+                    <a href="{{ path('app_player_session_edit', {'id': player_session.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_player_session_new') }}">Create new</a>
+{% endblock %}
