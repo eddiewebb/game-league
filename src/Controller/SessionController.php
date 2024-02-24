@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Session;
+use App\Entity\PlayerSession;
 use App\Form\SessionType;
+use App\Form\PlayerSessionType;
 use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,11 +44,16 @@ class SessionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_session_show', methods: ['GET'])]
-    public function show(Session $session): Response
-    {
+    #[Route('/{id}', name: 'app_session_show', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function show(Session $session,Request $request, EntityManagerInterface $entityManager): Response
+    {   
+        $playerSession = new PlayerSession();
+        $playerSession->setSession($session);
+        $form = $this->createForm(PlayerSessionType::class, $playerSession);
+        
         return $this->render('session/show.html.twig', [
             'session' => $session,
+            'player_form' => $form
         ]);
     }
 
@@ -71,7 +78,18 @@ class SessionController extends AbstractController
     #[Route('/{id}', name: 'app_session_delete', methods: ['POST'])]
     public function delete(Request $request, Session $session, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$session->getId(), $request->request->get('_token'))) {
+
+        $playerSession = new PlayerSession();
+        $playerSession->setSession($session);
+        $form = $this->createForm(PlayerSessionType::class, $playerSession);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($playerSession);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_session_show', ['id',$session->id], Response::HTTP_SEE_OTHER);
+        }elseif ($this->isCsrfTokenValid('delete'.$session->getId(), $request->request->get('_token'))) {
             $entityManager->remove($session);
             $entityManager->flush();
         }

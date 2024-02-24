@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Player;
 use App\Entity\PlayerSession;
+use App\Entity\Session;
 use App\Form\PlayerSessionType;
 use App\Repository\PlayerSessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,10 +24,11 @@ class PlayerSessionController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_player_session_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new/{session_id}', name: 'app_player_session_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, int $session_id=1): Response
     {
         $playerSession = new PlayerSession();
+        $playerSession->setSession($entityManager->find('App\Entity\Session', $session_id));
         $form = $this->createForm(PlayerSessionType::class, $playerSession);
         $form->handleRequest($request);
 

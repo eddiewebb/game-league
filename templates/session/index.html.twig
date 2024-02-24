@@ -10,6 +10,8 @@
             <tr>
                 <th>Id</th>
                 <th>Date</th>
+                <th>Winning Player</th>
+                <th>Winning Faction</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -18,6 +20,12 @@
             <tr>
                 <td>{{ session.id }}</td>
                 <td>{{ session.date ? session.date|date('Y-m-d H:i:s') : '' }}</td>
+                {% if session.winningPlayerSession %}
+                <td>{{ session.winningPlayerSession.player.name }}</td>
+                <td>{{ session.winningPlayerSession.gameRole.name }}</td>
+                {% else %}
+                    <td colspan="2"><a href="{{ path('app_session_show', {'id': session.id}) }}">Mark Players Now!</a></td>
+                {% endif %}
                 <td>
                     <a href="{{ path('app_session_show', {'id': session.id}) }}">show</a>
                     <a href="{{ path('app_session_edit', {'id': session.id}) }}">edit</a>

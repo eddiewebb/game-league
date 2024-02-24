@@ -42,7 +42,7 @@ class GameController extends AbstractController
         ]);
     }
 
-    #[Route('/{id:int}', name: 'app_game_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_game_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Game $game): Response
     {
         return $this->render('game/show.html.twig', [

@@ -13,8 +13,16 @@
             </tr>
             <tr>
                 <th>Date</th>
-                <td>{{ session.date ? session.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ session.date ? session.date|date('M d, Y') : '' }}</td>
             </tr>
+            {% for playerSession in session.playerSessions %}
+                <tr>
+                    <th>{% if playerSession.isWinner %}👑{% endif %}{{ playerSession.gameRole.name }}</th>
+                    <td>{{ playerSession.player.name }} : {{ playerSession.score }}</td>
+                </tr>
+            {% endfor %}
+            <tr><td colspan="2">Add Players<br/>{{ include('session/_player_form.html.twig') }}</td></tr>
+            
         </tbody>
     </table>
 

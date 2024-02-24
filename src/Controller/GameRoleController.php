@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/game/role')]
 class GameRoleController extends AbstractController
 {
-    #[Route('/', name: 'app_game_role_index', methods: ['GET'])]
+    #[Route('/', name: 'app_game_role_index', methods: ['GET'], priority: 0)]
     public function index(GameRoleRepository $gameRoleRepository): Response
     {
         return $this->render('game_role/index.html.twig', [

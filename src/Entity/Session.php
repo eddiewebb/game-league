@@ -73,4 +73,18 @@ class Session
 
         return $this;
     }
+
+
+
+    /**
+     * @return PlayerSession
+     */
+    public function getWinningPlayerSession()
+    {   
+        foreach ($this->playerSessions as $key => $playerSession) {
+            if ($playerSession->isIsWinner()){
+                return $playerSession;
+            }
+        }  
+    }
 }

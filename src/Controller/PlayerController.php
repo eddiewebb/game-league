@@ -42,7 +42,7 @@ class PlayerController extends AbstractController
         ]);
     }
 
-    #[Route('/{id:int}', name: 'app_player_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_player_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Player $player): Response
     {
         return $this->render('player/show.html.twig', [
