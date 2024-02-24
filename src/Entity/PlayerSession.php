@@ -23,9 +23,13 @@ class PlayerSession
     #[ORM\Column(nullable: true)]
     private ?bool $isWinner = null;
 
-    #[ORM\ManyToOne(inversedBy: 'playerSessions')]
+    #[ORM\ManyToOne(inversedBy: 'playerSessions',targetEntity: GameRole::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?GameRole $gameRole = null;
+
+    #[ORM\ManyToOne(inversedBy: 'playerSessions',targetEntity: Player::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Player $player = null;
 
     public function getId(): ?int
     {
@@ -76,6 +80,18 @@ class PlayerSession
     public function setGameRole(?GameRole $gameRole): static
     {
         $this->gameRole = $gameRole;
+
+        return $this;
+    }
+
+    public function getPlayer(): ?Player
+    {
+        return $this->player;
+    }
+
+    public function setPlayer(?Player $player): static
+    {
+        $this->player = $player;
 
         return $this;
     }
