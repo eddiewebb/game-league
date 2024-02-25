@@ -27,11 +27,12 @@ class PlayerRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
         $query = $entityManager->createQuery(
-            'SELECT p,ps,s
+            'SELECT p,ps,s,g,gr
             FROM App\Entity\Player p
             LEFT JOIN p.playerSessions ps
             INNER JOIN ps.gameRole gr
             INNER JOIN ps.session s
+            INNER JOIN gr.game g
             WHERE p.id = :id'
         )->setParameter('id', $id);
         
