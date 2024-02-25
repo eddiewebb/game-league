@@ -43,8 +43,9 @@ class GameRoleController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_game_role_show', methods: ['GET'])]
-    public function show(GameRole $gameRole): Response
+    public function show(int $id, GameRoleRepository $gameRoleRepository): Response
     {
+        $gameRole = $gameRoleRepository->findGameRoleWithPlayerSession($id);
         return $this->render('game_role/show.html.twig', [
             'game_role' => $gameRole,
         ]);

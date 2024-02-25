@@ -3,20 +3,27 @@
 {% block title %}GameRole{% endblock %}
 
 {% block body %}
-    <h1>GameRole</h1>
+    <h1>GameRole - {{ game_role.name }}</h1>
 
-    <table class="table">
-        <tbody>
+    <div class="row">
+        <div class="col">
+            <p>The {{ game_role.name }} have been in {{game_role.playerSessions|length}} battles, {{game_role.winningPlayerSessions|length}} times the victor.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <table class="table">
+        {% for playerSession in game_role.playerSessions %}
             <tr>
-                <th>Id</th>
-                <td>{{ game_role.id }}</td>
+                <th>{% if playerSession.isWinner %}👑 {% endif %}<a href="{{ path('app_player_show', {'id': playerSession.player.id}) }}">{{ playerSession.player.name }}</a></th>
+                <td> : {{ playerSession.score }} 
+                    <a href="{{ path('app_player_session_edit', {'id': playerSession.id,'return':'app_session_show'}) }}">edit</a></td>
             </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ game_role.name }}</td>
-            </tr>
-        </tbody>
+        {% endfor %}
     </table>
+        </div>
+    </div>
 
     <a href="{{ path('app_game_role_index') }}">back to list</a>
 

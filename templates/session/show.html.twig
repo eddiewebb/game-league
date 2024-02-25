@@ -3,42 +3,53 @@
 {% block title %}Session{% endblock %}
 
 {% block body %}
-    <h1>Session</h1>
+    <h1>Session {{ session.id }} Details - {{ session.date ? session.date|date('M d, Y') : '' }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ session.id }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ session.date ? session.date|date('M d, Y') : '' }}</td>
-            </tr>
-            {% set gameRolesUsed = session.game.gameRoles %}
-            {% for playerSession in session.playerSessions %}
-                {% set gameRolesUsed = gameRolesUsed|filter((v, k) => v != playerSession.gameRole) %}
-                <tr>
-                    <th>{% if playerSession.isWinner %}👑{% endif %}{{ playerSession.gameRole.name }}</th>
-                    <td>{{ playerSession.player.name }} : {{ playerSession.score }} 
-                        <a href="{{ path('app_player_session_edit', {'id': playerSession.id,'return':'app_session_show'}) }}">edit</a></td>
-                </tr>
-            {% endfor %}
-            {% if (gameRolesUsed|length) > 0 %}
-                {% set role = gameRolesUsed|first %}
-                <tr>
-                    <th>{{role.name}}</th>
-                    <td>{{ include('session/_player_form.html.twig') }}</td>
-                </tr>
+    <div class="row">
+        <div class="col-12">
+        <h3>Winner's Circle</h3>
+        {% if session.getWinningPlayerSession %}
+                <p><strong>{{ session.getWinningPlayerSession.gameRole.name }} </strong> were victorious led by <strong>{{ session.getWinningPlayerSession.player.name }} </strong></p>      
+        {% else %}
+            <p><strong>Awaiting Outcome...</strong></p>
+            <p>Enter players below and be sure to mark a winner!</p>
+
+
+        {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <h3>Player Roles</h3>
+        <table class="table">
+            <tbody>
+                {% set gameRolesUsed = session.game.gameRoles %}
+                {% for playerSession in session.playerSessions %}
+                    {% set gameRolesUsed = gameRolesUsed|filter((v, k) => v != playerSession.gameRole) %}
+                    <tr>
+                        <th>{% if playerSession.isWinner %}👑 {% endif %}<a href="{{ path('app_game_role_show', {'id': playerSession.gameRole.id}) }}">{{ playerSession.gameRole.name }}</a></th>
+                        <td>{{ playerSession.player.name }} : {{ playerSession.score }} 
+                            <a href="{{ path('app_player_session_edit', {'id': playerSession.id,'return':'app_session_show'}) }}">edit</a></td>
+                    </tr>
+                {% endfor %}
+                {% if (gameRolesUsed|length) > 0 %}
+                    {% set role = gameRolesUsed|first %}
+                    <tr>
+                        <th>{{role.name}}</th>
+                        <td>{{ include('session/_player_form.html.twig') }}</td>
+                    </tr>
+                    
+                {% endif %}
                 
-            {% endif %}
-            
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
 
-    <a href="{{ path('app_session_index') }}">back to list</a>
+        <a href="{{ path('app_session_index') }}">back to list</a>
 
-    <a href="{{ path('app_session_edit', {'id': session.id}) }}">edit</a>
+        <a href="{{ path('app_session_edit', {'id': session.id}) }}">edit</a>
+    </div>
+
 
     {{ include('session/_delete_form.html.twig') }}
 {% endblock %}

@@ -21,6 +21,21 @@ class GameRoleRepository extends ServiceEntityRepository
         parent::__construct($registry, GameRole::class);
     }
 
+    public function findGameRoleWithPlayerSession($id): ?GameRole
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT gr
+            FROM App\Entity\GameRole gr
+            LEFT JOIN gr.playerSessions ps
+            WHERE gr.id = :id'
+        )->setParameter('id', $id);
+        
+        return $query->getOneOrNullResult();
+    }
+
+    
+
     //    /**
     //     * @return GameRole[] Returns an array of GameRole objects
     //     */

@@ -28,7 +28,7 @@ class SessionController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $session = new Session();
-        $form = $this->createForm(SessionType::class, $session,array('session',session));
+        $form = $this->createForm(SessionType::class, $session);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -89,7 +89,6 @@ class SessionController extends AbstractController
             $playerSession->setGameRole($entityManager->find('App\Entity\GameRole', $request->request->get('game_role_id')));
             $entityManager->persist($playerSession);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_session_show', array('id'=>$session->getId()), Response::HTTP_SEE_OTHER);
         }elseif ($this->isCsrfTokenValid('delete'.$session->getId(), $request->request->get('_token'))) {
             $entityManager->remove($session);
