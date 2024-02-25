@@ -15,13 +15,22 @@
                 <th>Date</th>
                 <td>{{ session.date ? session.date|date('M d, Y') : '' }}</td>
             </tr>
+            {% set gameRolesUsed = session.game.gameRoles %}
             {% for playerSession in session.playerSessions %}
+                {% set gameRolesUsed = gameRolesUsed|filter((v, k) => v != playerSession.gameRole) %}
                 <tr>
                     <th>{% if playerSession.isWinner %}👑{% endif %}{{ playerSession.gameRole.name }}</th>
                     <td>{{ playerSession.player.name }} : {{ playerSession.score }}</td>
                 </tr>
             {% endfor %}
-            <tr><td colspan="2">Add Players<br/>{{ include('session/_player_form.html.twig') }}</td></tr>
+            {% if (gameRolesUsed|length) > 0 %}
+                {% set role = gameRolesUsed|first %}
+                <tr>
+                    <th>{{role.name}}</th>
+                    <td>{{ include('session/_player_form.html.twig') }}</td>
+                </tr>
+                
+            {% endif %}
             
         </tbody>
     </table>

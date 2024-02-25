@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Session;
 use App\Entity\PlayerSession;
 use App\Form\SessionType;
-use App\Form\PlayerSessionType;
+use App\Form\SessionPlayerLightType;
 use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,14 +28,14 @@ class SessionController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $session = new Session();
-        $form = $this->createForm(SessionType::class, $session);
+        $form = $this->createForm(SessionType::class, $session,array('session',session));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($session);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_session_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_session_show',  array('id'=>$session->getId()), Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('session/new.html.twig', [
@@ -49,7 +49,8 @@ class SessionController extends AbstractController
     {   
         $playerSession = new PlayerSession();
         $playerSession->setSession($session);
-        $form = $this->createForm(PlayerSessionType::class, $playerSession);
+        $leftovers = $entityManager->getRepository('App\Entity\Player')->findPlayersNotAssignedToSession($session);
+        $form = $this->createForm(SessionPlayerLightType::class, $playerSession, array('leftovers'=>$leftovers));
         
         return $this->render('session/show.html.twig', [
             'session' => $session,
@@ -81,14 +82,15 @@ class SessionController extends AbstractController
 
         $playerSession = new PlayerSession();
         $playerSession->setSession($session);
-        $form = $this->createForm(PlayerSessionType::class, $playerSession);
+        $form = $this->createForm(SessionPlayerLightType::class, $playerSession);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $playerSession->setGameRole($entityManager->find('App\Entity\GameRole', $request->request->get('game_role_id')));
             $entityManager->persist($playerSession);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_session_show', ['id',$session->id], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_session_show', array('id'=>$session->getId()), Response::HTTP_SEE_OTHER);
         }elseif ($this->isCsrfTokenValid('delete'.$session->getId(), $request->request->get('_token'))) {
             $entityManager->remove($session);
             $entityManager->flush();

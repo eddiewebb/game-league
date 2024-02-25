@@ -17,7 +17,7 @@ class GameRoleType extends AbstractType
             ->add('name')
             ->add('game', EntityType::class, [
                 'class' => Game::class,
-'choice_label' => 'id',
+'choice_label' => 'name',
             ])
         ;
     }

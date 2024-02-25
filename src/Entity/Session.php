@@ -22,6 +22,10 @@ class Session
     #[ORM\OneToMany(targetEntity: PlayerSession::class, mappedBy: 'session', orphanRemoval: true)]
     private Collection $playerSessions;
 
+    #[ORM\ManyToOne(inversedBy: 'gameSessions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Game $game = null;
+
     public function __construct()
     {
         $this->playerSessions = new ArrayCollection();
@@ -40,6 +44,17 @@ class Session
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
+
+        return $this;
+    }
+    public function getGame(): ?Game
+    {
+        return $this->game;
+    }
+
+    public function setGame(?Game $game): static
+    {
+        $this->game = $game;
 
         return $this;
     }

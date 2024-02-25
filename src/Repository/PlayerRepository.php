@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Player;
+use App\Entity\Session;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,6 +22,19 @@ class PlayerRepository extends ServiceEntityRepository
         parent::__construct($registry, Player::class);
     }
 
+    public function findPlayersNotAssignedToSession(Session $session): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT p
+            FROM App\Entity\Player p
+            LEFT JOIN p.playerSessions ps WITH ps.session = :session
+            WHERE ps.id is null'
+        )->setParameter('session', $session);
+
+        return $query->getResult();
+    }
     //    /**
     //     * @return Player[] Returns an array of Player objects
     //     */

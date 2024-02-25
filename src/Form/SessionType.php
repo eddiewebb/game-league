@@ -3,8 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Session;
+use App\Entity\Game;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SessionType extends AbstractType
@@ -13,6 +15,10 @@ class SessionType extends AbstractType
     {
         $builder
             ->add('date')
+            ->add('game', EntityType::class, [
+                'class' => Game::class,
+                'choice_label' => 'name',
+            ])
         ;
     }
 

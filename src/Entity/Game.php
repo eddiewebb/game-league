@@ -20,6 +20,9 @@ class Game
 
     #[ORM\OneToMany(targetEntity: GameRole::class, mappedBy: 'game', orphanRemoval: true)]
     private Collection $gameRoles;
+   
+    #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'game', orphanRemoval: true)]
+    private Collection $sessions;
 
     public function __construct()
     {
@@ -67,6 +70,39 @@ class Game
             // set the owning side to null (unless already changed)
             if ($gameRole->getGame() === $this) {
                 $gameRole->setGame(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
+    /**
+     * @return Collection<int, Session>
+     */
+    public function getsessions(): Collection
+    {
+        return $this->sessions;
+    }
+
+    public function addsession(Session $session): static
+    {
+        if (!$this->sessions->contains($session)) {
+            $this->sessions->add($session);
+            $session->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removesession(Session $session): static
+    {
+        if ($this->sessions->removeElement($session)) {
+            // set the owning side to null (unless already changed)
+            if ($session->getGame() === $this) {
+                $session->setGame(null);
             }
         }
 
