@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Session;
+use App\Entity\PlayerSession;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,22 @@ class SessionRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Session::class);
+    }
+
+    public function findSessionWithFullSessionInfo($id): ?Session
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT session, ps,p,g, gr
+            FROM App\Entity\Session session
+            LEFT JOIN session.playerSessions ps
+            INNER JOIN ps.player p
+            LEFT JOIN session.game g
+            INNER JOIN g.gameRoles gr
+            WHERE session.id = :id'
+        )->setParameter('id', $id);
+        
+        return $query->getOneOrNullResult();
     }
 
     //    /**

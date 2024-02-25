@@ -22,7 +22,7 @@ class Session
     #[ORM\OneToMany(targetEntity: PlayerSession::class, mappedBy: 'session', orphanRemoval: true)]
     private Collection $playerSessions;
 
-    #[ORM\ManyToOne(inversedBy: 'gameSessions')]
+    #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Game $game = null;
 
