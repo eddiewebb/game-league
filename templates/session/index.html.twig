@@ -1,10 +1,30 @@
 {% extends 'base.html.twig' %}
+{% block javascripts %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0" defer></script>
+<script src="/client.js" defer></script>
+{% endblock %}
 
 {% block title %}Session index{% endblock %}
 
 {% block body %}
     <h1>Session index</h1>
+    <div class="row">
+        <div class="col">
+            <canvas id="factionPie"></canvas>
+        </div>
+        <div class="col">
+            <canvas id="combinedRadar"></canvas>
+        </div>
+        <div class="col">
+            <canvas id="playerPie"></canvas>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col">
+            
     <table class="table">
         <thead>
             <tr>
@@ -21,8 +41,8 @@
                 <td>{{ session.id }}</td>
                 <td>{{ session.date ? session.date|date('Y-m-d H:i:s') : '' }}</td>
                 {% if session.winningPlayerSession %}
-                <td>{{ session.winningPlayerSession.player.name }}</td>
-                <td>{{ session.winningPlayerSession.gameRole.name }}</td>
+                <td><a href="{{ path('app_player_show', {'id': session.winningPlayerSession.player.id}) }}">{{ session.winningPlayerSession.player.name }}</a></td>
+                <td><a href="{{ path('app_game_role_show', {'id': session.winningPlayerSession.gameRole.id}) }}">{{ session.winningPlayerSession.gameRole.name }}</td>
                 {% else %}
                     <td colspan="2"><a href="{{ path('app_session_show', {'id': session.id}) }}">Mark Players Now!</a></td>
                 {% endif %}
@@ -40,4 +60,21 @@
     </table>
 
     <a href="{{ path('app_session_new') }}">Create new</a>
+        </div>
+</div>
+<script>
+   const sessions = [
+    {% for session in sessions %}
+        {
+            "winning_faction":"{{session.winningPlayerSession.gameRole.name}}",
+            "winning_player":"{{session.winningPlayerSession.player.name}}"
+        },
+    {% endfor %}
+]   ;
+
+document.addEventListener("DOMContentLoaded", async function(event) {
+    console.log(sessions)
+    updateChart(sessions)
+});
+</script>
 {% endblock %}
