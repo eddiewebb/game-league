@@ -14,8 +14,10 @@
         {% endblock %}
     </head>
     <body>
+        {% block navbar %}
+            {% include 'navbar.html.twig' %}
+        {% endblock %}
         <div class="container">
-
             {% block body %}{% endblock %}
         </div>
     </body>
