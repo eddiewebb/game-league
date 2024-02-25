@@ -43,8 +43,9 @@ class PlayerController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_player_show', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function show(Player $player): Response
+    public function show(int $id, PlayerRepository $playerRepository): Response
     {
+        $player = $playerRepository->findPlayerWithRoles($id);
         return $this->render('player/show.html.twig', [
             'player' => $player,
         ]);

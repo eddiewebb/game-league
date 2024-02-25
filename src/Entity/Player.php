@@ -50,6 +50,15 @@ class Player
     {
         return $this->playerSessions;
     }
+        /**
+     * @return Collection<int, PlayerSession>
+     */
+    public function getWinningPlayerSessions(): Collection
+    {
+        return $this->playerSessions->filter( 
+            fn($value) => $value->isIsWinner()
+        );
+    }
 
     public function addPlayerSession(PlayerSession $playerSession): static
     {

@@ -18,7 +18,7 @@ class GameController extends AbstractController
     public function index(GameRepository $gameRepository): Response
     {
         return $this->render('game/index.html.twig', [
-            'games' => $gameRepository->findAll(),
+            'games' => $gameRepository->findAllGames(),
         ]);
     }
 
@@ -43,8 +43,9 @@ class GameController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_game_show', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function show(Game $game): Response
+    public function show(int $id,GameRepository $gameRepository): Response
     {
+        $game = $gameRepository->findGameWithRoles($id);
         return $this->render('game/show.html.twig', [
             'game' => $game,
         ]);

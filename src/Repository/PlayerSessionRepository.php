@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Player;
 use App\Entity\PlayerSession;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,6 +21,34 @@ class PlayerSessionRepository extends ServiceEntityRepository
         parent::__construct($registry, PlayerSession::class);
     }
 
+    public function findByIdWithInfo(int $id): ?PlayerSession
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT playerSession,p,s,gr
+            FROM App\Entity\PlayerSession playerSession
+            INNER JOIN playerSession.session s
+            INNER JOIN playerSession.player p
+            INNER JOIN playerSession.gameRole gr
+            WHERE playerSession.id = :id'
+        )->setParameter('id',$id);
+        
+        return $query->getOneOrNullResult();
+    }
+    public function findAllWithInfo(): ?array
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT playerSession,p,s, gr
+            FROM App\Entity\PlayerSession playerSession
+            INNER JOIN playerSession.session s
+            INNER JOIN playerSession.player p
+            INNER JOIN playerSession.gameRole gr
+            ORDER BY s.date desc,playerSession.score desc'
+        );
+        
+        return $query->getResult();
+    }
     //    /**
     //     * @return PlayerSession[] Returns an array of PlayerSession objects
     //     */

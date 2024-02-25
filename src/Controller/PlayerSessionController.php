@@ -20,7 +20,7 @@ class PlayerSessionController extends AbstractController
     public function index(PlayerSessionRepository $playerSessionRepository): Response
     {
         return $this->render('player_session/index.html.twig', [
-            'player_sessions' => $playerSessionRepository->findAll(),
+            'player_sessions' => $playerSessionRepository->findAllWithInfo(),
         ]);
     }
 
@@ -46,8 +46,9 @@ class PlayerSessionController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_player_session_show', methods: ['GET'])]
-    public function show(PlayerSession $playerSession): Response
+    public function show(int $id,PlayerSessionRepository $playerSessionRepository): Response
     {
+        $playerSession = $playerSessionRepository->findByIdWithInfo($id);
         return $this->render('player_session/show.html.twig', [
             'player_session' => $playerSession,
         ]);

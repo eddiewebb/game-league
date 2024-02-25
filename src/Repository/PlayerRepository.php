@@ -22,6 +22,22 @@ class PlayerRepository extends ServiceEntityRepository
         parent::__construct($registry, Player::class);
     }
 
+
+    public function findPlayerWithRoles($id): ?Player
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT p,ps,s
+            FROM App\Entity\Player p
+            LEFT JOIN p.playerSessions ps
+            INNER JOIN ps.gameRole gr
+            INNER JOIN ps.session s
+            WHERE p.id = :id'
+        )->setParameter('id', $id);
+        
+        return $query->getOneOrNullResult();
+    }
+
     public function findPlayersNotAssignedToSession(Session $session): array
     {
         $entityManager = $this->getEntityManager();
