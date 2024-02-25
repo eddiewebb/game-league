@@ -38,6 +38,21 @@ class SessionRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
+    public function findAllWithFullSessionInfo(): ?array
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT session, ps,p,g, gr
+            FROM App\Entity\Session session
+            LEFT JOIN session.playerSessions ps
+            INNER JOIN ps.player p
+            LEFT JOIN session.game g
+            INNER JOIN g.gameRoles gr'
+        );
+        
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return Session[] Returns an array of Session objects
     //     */
