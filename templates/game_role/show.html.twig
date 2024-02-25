@@ -17,8 +17,12 @@
         {% for playerSession in game_role.playerSessions %}
             <tr>
                 <th>{% if playerSession.isWinner %}👑 {% endif %}<a href="{{ path('app_player_show', {'id': playerSession.player.id}) }}">{{ playerSession.player.name }}</a></th>
-                <td> : {{ playerSession.score }} 
-                    <a href="{{ path('app_player_session_edit', {'id': playerSession.id,'return':'app_session_show'}) }}">edit</a></td>
+                <td>
+                    <a href="{{ path('app_session_show', {'id': playerSession.session.id}) }}">{{ playerSession.session.date ? playerSession.session.date|date('M d, Y') : '' }}</a>
+                    
+                     : {{ playerSession.score }} 
+                    <a href="{{ path('app_player_session_edit', {'id': playerSession.id,'return':'app_game_role_show'}) }}">edit</a>
+                </td>
             </tr>
         {% endfor %}
     </table>

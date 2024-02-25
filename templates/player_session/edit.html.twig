@@ -8,6 +8,8 @@
     {{ include('player_session/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('app_player_session_index') }}">back to list</a>
+| 
+    <a href="{{ path('app_session_show',{'id':player_session.session.id}) }}">see all in session</a>
 
     {{ include('player_session/_delete_form.html.twig') }}
 {% endblock %}

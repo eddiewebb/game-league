@@ -64,6 +64,8 @@ class PlayerSessionController extends AbstractController
             $option = [];
             if ($return == 'app_session_show'){
                 $option = array('id'=>$playerSession->getSession()->getId());
+            }elseif ($return == 'app_game_role_show'){
+                $option = array('id'=>$playerSession->getGameRole()->getId());
             }
             return $this->redirectToRoute($return, $option, Response::HTTP_SEE_OTHER);
         }
