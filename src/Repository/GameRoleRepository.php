@@ -25,9 +25,12 @@ class GameRoleRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
         $query = $entityManager->createQuery(
-            'SELECT gr
+            'SELECT gr,g,ps,p,s
             FROM App\Entity\GameRole gr
+            LEFT JOIN gr.game g
             LEFT JOIN gr.playerSessions ps
+            INNER JOIN ps.session s
+            INNER JOIN ps.player p
             WHERE gr.id = :id'
         )->setParameter('id', $id);
         
