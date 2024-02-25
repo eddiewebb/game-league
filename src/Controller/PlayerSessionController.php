@@ -53,16 +53,19 @@ class PlayerSessionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_player_session_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, PlayerSession $playerSession, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/edit/{return}', name: 'app_player_session_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, PlayerSession $playerSession, EntityManagerInterface $entityManager, string $return='app_player_session_index'): Response
     {
         $form = $this->createForm(PlayerSessionType::class, $playerSession);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_player_session_index', [], Response::HTTP_SEE_OTHER);
+            $option = [];
+            if ($return == 'app_session_show'){
+                $option = array('id'=>$playerSession->getSession()->getId());
+            }
+            return $this->redirectToRoute($return, $option, Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('player_session/edit.html.twig', [

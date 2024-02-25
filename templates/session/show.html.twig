@@ -20,7 +20,8 @@
                 {% set gameRolesUsed = gameRolesUsed|filter((v, k) => v != playerSession.gameRole) %}
                 <tr>
                     <th>{% if playerSession.isWinner %}👑{% endif %}{{ playerSession.gameRole.name }}</th>
-                    <td>{{ playerSession.player.name }} : {{ playerSession.score }}</td>
+                    <td>{{ playerSession.player.name }} : {{ playerSession.score }} 
+                        <a href="{{ path('app_player_session_edit', {'id': playerSession.id,'return':'app_session_show'}) }}">edit</a></td>
                 </tr>
             {% endfor %}
             {% if (gameRolesUsed|length) > 0 %}
