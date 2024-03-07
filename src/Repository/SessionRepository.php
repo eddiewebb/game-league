@@ -22,16 +22,16 @@ class SessionRepository extends ServiceEntityRepository
         parent::__construct($registry, Session::class);
     }
 
-    public function findSessionWithFullSessionInfo($id): ?Session
+    public function findSessionWithFullSessionInfo($id): Session
     {
         $entityManager = $this->getEntityManager();
         $query = $entityManager->createQuery(
             'SELECT session, ps,p,g, gr
             FROM App\Entity\Session session
             LEFT JOIN session.playerSessions ps
-            INNER JOIN ps.player p
+            LEFT JOIN ps.player p
             LEFT JOIN session.game g
-            INNER JOIN g.gameRoles gr
+            LEFT JOIN g.gameRoles gr
             WHERE session.id = :id'
         )->setParameter('id', $id);
         
