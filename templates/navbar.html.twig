@@ -18,6 +18,19 @@
         <li class="nav-item">
           <a class="nav-link" href="/game">Games</a>
         </li>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+          <li class="nav-item ml-5">
+            👤<a class="nav-link" style="display:inline-block" href="{{ path('app_player_show', {'id': app.user.id}) }}">{{ app.user.handle }}</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" style="display:inline-block" href="/logout">Logout</a>
+          </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" style="display:inline-block" href="/login">Login</a>
+        </li>
+        {% endif %}
       </ul>
     </div>
   </div>

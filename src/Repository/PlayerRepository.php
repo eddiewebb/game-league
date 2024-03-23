@@ -46,9 +46,9 @@ class PlayerRepository extends ServiceEntityRepository implements PasswordUpgrad
             'SELECT p,ps,s,g,gr
             FROM App\Entity\Player p
             LEFT JOIN p.playerSessions ps
-            INNER JOIN ps.gameRole gr
-            INNER JOIN ps.session s
-            INNER JOIN gr.game g
+            LEFT JOIN ps.gameRole gr
+            LEFT JOIN ps.session s
+            LEFT JOIN gr.game g
             WHERE p.id = :id'
         )->setParameter('id', $id);
         
