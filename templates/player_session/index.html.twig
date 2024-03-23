@@ -23,7 +23,7 @@
                 <td>{{ player_session.player.name }}</td>
                 <td>{{ player_session.gameRole.name }}</td>
                 <td>{{ player_session.score }}</td>
-                <td>{% if player_session.isWinner %}👑 {% endif %}</td>
+                <td>{% if player_session.isWinner %}👑{% else %} {% endif %}</td>
                 <td>
                     <a href="{{ path('app_player_session_show', {'id': player_session.id}) }}">show</a>
                     <a href="{{ path('app_player_session_edit', {'id': player_session.id}) }}">edit</a>

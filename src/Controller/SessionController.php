@@ -46,7 +46,8 @@ class SessionController extends AbstractController
 
     #[Route('/{id}', name: 'app_session_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(int $id, Request $request, EntityManagerInterface $entityManager,SessionRepository $sessionRepository): Response
-    {   $session = $sessionRepository->findSessionWithFullSessionInfo($id);
+    {   
+        $session = $sessionRepository->findSessionWithFullSessionInfo($id);
         $playerSession = new PlayerSession();
         $playerSession->setSession($session);
         $leftovers = $entityManager->getRepository('App\Entity\Player')->findPlayersNotAssignedToSession($session);
