@@ -10,17 +10,16 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for player in players %}
             <tr>
                 <td>{{ player.id }}</td>
-                <td>{{ player.name }}</td>
-                <td>
-                    <a href="{{ path('app_player_show', {'id': player.id}) }}">show</a>
+                <td><a href="{{ path('app_player_show', {'id': player.id}) }}">{{ player.name }}</a>
+                    {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('app_player_edit', {'id': player.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -30,6 +29,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('app_player_new') }}" class="btn btn-primary">Create new</a>
+    {% endif %}
 {% endblock %}

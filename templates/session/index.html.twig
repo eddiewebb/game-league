@@ -32,13 +32,16 @@
                 <th>Date</th>
                 <th>Winning Player</th>
                 <th>Winning Faction</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for session in sessions %}
             <tr>
-                <td>{{ session.id }}</td>
+                <td>
+                    {{ session.id }}<br/>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_session_edit', {'id': session.id}) }}">edit</a>
+                    {% endif %}</td>
                 <td>{{ session.date ? session.date|date('Y-m-d H:i:s') : '' }}</td>
                 {% if session.winningPlayerSession %}
                 <td><a href="{{ path('app_player_show', {'id': session.winningPlayerSession.player.id}) }}">{{ session.winningPlayerSession.player.name }}</a></td>
@@ -46,10 +49,6 @@
                 {% else %}
                     <td colspan="2"><a href="{{ path('app_session_show', {'id': session.id}) }}">Mark Players Now!</a></td>
                 {% endif %}
-                <td>
-                    <a href="{{ path('app_session_show', {'id': session.id}) }}">show</a>
-                    <a href="{{ path('app_session_edit', {'id': session.id}) }}">edit</a>
-                </td>
             </tr>
         {% else %}
             <tr>
@@ -58,9 +57,10 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('app_session_new') }}" class="btn btn-primary">Create new</a>
-        </div>
+    {% endif %}
+    </div>
 </div>
 <script>
    const sessions = [
