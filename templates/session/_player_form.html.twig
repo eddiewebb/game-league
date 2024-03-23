@@ -2,5 +2,5 @@
    
 <input type="hidden" name="game_role_id" value="{{ role.id }}">
     {{ form_widget(player_form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(player_form) }}
